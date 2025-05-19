@@ -1,0 +1,24 @@
+<div>
+  <!-- NavBar -->
+  <div
+    class="flex justify-between items-center shadow-sm p-6 mb-4 bg-white w-full bg-white-700 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100"
+  >
+    <div
+      class="flex gap-4 items-center justify-center"
+      [routerLink]="'/landing'"
+    >
+      <img src="assets/logo.png" alt="Logo" class="h-10 w-auto" />
+      <h1 class="text-xl font-bold text-stone-800 font-nunito">InnovaTube</h1>
+    </div>
+    <div class="space-x-8 flex items-center flex-row">
+      <p class="text-stone-600 font-nunito font-bold">Bienvenido, Usuario</p>
+      <button
+        routerLink="/"
+        class="text-stone-600 hover:text-rose-600 font-nunito"
+      >
+        <i class="pi pi-sign-out"></i>
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</div>
