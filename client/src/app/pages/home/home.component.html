@@ -21,4 +21,72 @@
       </button>
     </div>
   </div>
+  <!-- Tabs -->
+  <div class="mx-12 items-center justify-center font-nunito">
+    <p-tabs value="0" class="">
+      <p-tablist>
+        <p-tab value="0"><i class="pi pi-compass"></i> Explorar</p-tab>
+        <p-tab value="1"><i class="pi pi-heart"></i>Favoritos</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="0">
+          <div class="flex gap-4 flex-row justify-center items-center mt-4">
+            <input
+              formControlName="identifier"
+              type="text"
+              placeholder="Buscar videos"
+              class="w-full p-3 border border-rose-200 rounded-full font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
+            />
+            <button
+              (click)="handleSearch()"
+              class="px-6 h-12 bg-rose-400 flex items-center gap-2 text-white rounded-full hover:bg-rose-500 font-nunito"
+            >
+              <i class="pi pi-search"></i>
+              Buscar
+            </button>
+          </div>
+          <div
+            class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+          >
+            <div
+              *ngFor="let video of searchResults"
+              class="p-4 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
+            >
+              <img
+                [src]="video.thumbnail"
+                alt="Thumbnail"
+                class="w-full mb-2"
+              />
+              <div class="flex flex-row gap-1.5 items-start justify-between">
+                <h2 class="text-lg font-semibold font-nunito items-center">
+                  {{ video.title }}
+                </h2>
+                <button
+                  class="pt-2 pb-1 px-2 items-center justify-center bg-rose-300 text-white rounded-full hover:bg-rose-500 font-nunito"
+                >
+                  <i class="pi pi-heart"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <div class="flex gap-4 flex-row">
+            <input
+              formControlName="identifier"
+              type="text"
+              placeholder="Buscar videos en favoriitos"
+              class="w-full p-3 border border-rose-200 rounded-full font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
+            />
+            <button
+              class="px-4 py-2 bg-rose-400 flex items-center gap-2 text-white rounded-full hover:bg-rose-500 font-nunito"
+            >
+              <i class="pi pi-search"></i>
+              Buscar
+            </button>
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
 </div>
