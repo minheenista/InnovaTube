@@ -88,24 +88,53 @@
         <label for="role" class="block text-sm font-medium text-neutral-800">
           Contraseña
         </label>
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="Contraseña"
-          class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
-        />
+        <div class="flex items-center gap-2">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            type="password"
+            placeholder="Contraseña"
+            class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="text-rose-400"
+          >
+            <i *ngIf="showPassword; else eyeOpen" class="pi pi-eye-slash"></i>
+            <ng-template #eyeOpen>
+              <i class="pi pi-eye"></i>
+            </ng-template>
+          </button>
+        </div>
       </div>
 
       <div class="flex gap-4 flex-col">
         <label for="role" class="block text-sm font-medium text-neutral-800">
           Confirmar contraseña
         </label>
-        <input
-          formControlName="confirmPassword"
-          type="password"
-          placeholder="Confirmar contraseña"
-          class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
-        />
+        <div class="flex items-center gap-2">
+          <input
+            [type]="showPasswordConfirm ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            type="password"
+            placeholder="Confirmar contraseña"
+            class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordConfirmVisibility()"
+            class="text-rose-400"
+          >
+            <i
+              *ngIf="showPasswordConfirm; else eyeOpenConfirm"
+              class="pi pi-eye-slash"
+            ></i>
+            <ng-template #eyeOpenConfirm>
+              <i class="pi pi-eye"></i>
+            </ng-template>
+          </button>
+        </div>
       </div>
 
       <p class="text-sm text-center text-gray-600 font-nunito">
@@ -125,6 +154,12 @@
       >
         Registrarse
       </button>
+      <p
+        *ngIf="messageRegister"
+        class="text-red-500 text-sm text-center font-nunito"
+      >
+        {{ messageRegister }}
+      </p>
     </form>
   </div>
 </div>

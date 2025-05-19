@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TabsModule } from 'primeng/tabs';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,13 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
   searchTerm: string = '';
   searchResults: any[] = [];
+
+  user: any;
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    this.user = this.authService.getCurrentUser();
+  }
 
   handleSearch() {
     // Aquí irá la lógica para hacer fetch a los resultados
@@ -47,5 +55,10 @@ export class HomeComponent {
         thumbnail: 'https://img.youtube.com/vi/VIDEO_ID7/mqdefault.jpg',
       },
     ];
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }

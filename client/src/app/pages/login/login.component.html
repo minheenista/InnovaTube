@@ -37,27 +37,46 @@
 
     <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" class="space-y-4">
       <div class="flex gap-4 flex-col">
-        <label for="role" class="block text-sm font-medium text-neutral-800">
+        <label
+          for="identifier"
+          class="block text-sm font-medium text-neutral-800"
+        >
           Usuario o correo electrónico
         </label>
         <input
           formControlName="identifier"
           type="text"
-          placeholder="Usuario o correo electrónico"
+          placeholder="ejemplo@correo.com o usuario123"
           class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
         />
       </div>
 
       <div class="flex gap-4 flex-col">
-        <label for="role" class="block text-sm font-medium text-neutral-800">
+        <label
+          for="password"
+          class="block text-sm font-medium text-neutral-800"
+        >
           Contraseña
         </label>
-        <input
-          formControlName="password"
-          type="password"
-          placeholder="Contraseña"
-          class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
-        />
+        <div class="flex items-center gap-2">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            type="password"
+            placeholder="Contraseña"
+            class="w-full p-3 border border-rose-200 rounded-md font-nunito text-sm focus:outline-none focus:ring-1 focus:ring-rose-500"
+          />
+          <button
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="text-rose-400"
+          >
+            <i *ngIf="showPassword; else eyeOpen" class="pi pi-eye-slash"></i>
+            <ng-template #eyeOpen>
+              <i class="pi pi-eye"></i>
+            </ng-template>
+          </button>
+        </div>
       </div>
 
       <p class="text-sm text-center text-gray-600 font-nunito">
@@ -77,6 +96,13 @@
       >
         Iniciar sesión
       </button>
+
+      <p
+        *ngIf="messageLogin"
+        class="text-red-500 text-sm text-center font-nunito"
+      >
+        {{ messageLogin }}
+      </p>
 
       <p class="text-sm text-center text-gray-600 font-nunito">
         No tienes una cuenta?&nbsp;
