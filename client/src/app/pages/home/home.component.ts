@@ -3,28 +3,50 @@ import { Router, RouterLink } from '@angular/router';
 import { TabsModule } from 'primeng/tabs';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { YouTubeService } from '../../services/youtube.service';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { response } from 'express';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, TabsModule, CommonModule],
+  imports: [RouterLink, TabsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
   searchTerm: string = '';
   searchResults: any[] = [];
+  searchForm = new FormGroup({
+    search: new FormControl(''),
+  });
+
+  searchQuery: string = '';
+  results: any[] = [];
 
   user: any;
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder,
+    private youtubeService: YouTubeService
+  ) {
+    this.searchForm = this.fb.group({
+      search: [''],
+    });
+  }
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
   }
 
-  handleSearch() {
-    // Aquí irá la lógica para hacer fetch a los resultados
+  /* handleSearch() {
     console.log('Buscando:', this.searchTerm);
-    // Simulación de resultados:
     this.searchResults = [
       {
         title: 'Video de prueba 1',
@@ -55,6 +77,20 @@ export class HomeComponent {
         thumbnail: 'https://img.youtube.com/vi/VIDEO_ID7/mqdefault.jpg',
       },
     ];
+  } */
+
+  search() {
+    const query = this.searchForm.value.search;
+    console.log('Buscando:', query);
+
+    this.youtubeService.searchVideos(this.searchQuery).subscribe((res) => {
+      this.searchResults = res.items.map((item: any) => ({
+        title: item.snippet.title,
+        thumbnail: item.snippet.thumbnails.high.url,
+        videoId: item.id.videoId,
+      }));
+    });
+    console.log('Resultados:', this.searchResults);
   }
 
   logout() {
