@@ -15,12 +15,15 @@ import { response } from 'express';
 import { Video } from '../../models/video.model';
 import { FavoritesService } from '../../services/favorites.service';
 import { Favorite } from '../../models/favorite.model';
+import { Toast } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, TabsModule, CommonModule, ReactiveFormsModule],
+  imports: [RouterLink, TabsModule, CommonModule, ReactiveFormsModule, Toast],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
+  providers: [MessageService],
 })
 export class HomeComponent {
   searchTerm: string = '';
@@ -40,7 +43,8 @@ export class HomeComponent {
     private router: Router,
     private fb: FormBuilder,
     private youtubeService: YouTubeService,
-    private favoritesService: FavoritesService
+    private favoritesService: FavoritesService,
+    private messageService: MessageService
   ) {
     this.searchForm = this.fb.group({
       search: [''],
@@ -92,6 +96,10 @@ export class HomeComponent {
         .subscribe(() => {
           this.loadFavorites(this.user.id);
         });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Video eliminado de favoritos',
+      });
       video.isFavorite = false;
     } else {
       const fav: Favorite = {
@@ -110,6 +118,10 @@ export class HomeComponent {
         .subscribe(() => {
           this.loadFavorites(this.user.id);
           video.isFavorite = true;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Video agregado a favoritos',
+          });
         });
     }
   }
