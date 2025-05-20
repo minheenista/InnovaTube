@@ -5,7 +5,7 @@ import { Favorite } from '../models/favorite.model';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
-  private api = 'http://localhost:4000/favorites/';
+  private api = 'https://innovatube-d3xy.onrender.com/favorites/';
 
   constructor(private http: HttpClient) {}
 

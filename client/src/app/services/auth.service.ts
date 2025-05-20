@@ -7,7 +7,7 @@ import { response } from 'express';
   providedIn: 'root',
 })
 export class AuthService {
-  API_URL = 'http://localhost:4000/api/';
+  API_URL = 'https://innovatube-d3xy.onrender.com/api/';
 
   constructor(private http: HttpClient) {}
 
