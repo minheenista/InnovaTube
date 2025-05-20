@@ -12,6 +12,9 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { response } from 'express';
+import { Video } from '../../models/video.model';
+import { FavoritesService } from '../../services/favorites.service';
+import { Favorite } from '../../models/favorite.model';
 
 @Component({
   selector: 'app-home',
@@ -28,13 +31,16 @@ export class HomeComponent {
 
   searchQuery: string = '';
   results: any[] = [];
+  videos: Video[] = [];
+  favorites: Favorite[] = [];
 
   user: any;
   constructor(
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private youtubeService: YouTubeService
+    private youtubeService: YouTubeService,
+    private favoritesService: FavoritesService
   ) {
     this.searchForm = this.fb.group({
       search: [''],
@@ -43,41 +49,8 @@ export class HomeComponent {
 
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
+    this.loadFavorites(this.user.id);
   }
-
-  /* handleSearch() {
-    console.log('Buscando:', this.searchTerm);
-    this.searchResults = [
-      {
-        title: 'Video de prueba 1',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID1/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 2',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID2/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 3',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID3/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 4',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID4/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 5 jashdjas asjdhasf jashdas ',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID5/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 6',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID6/mqdefault.jpg',
-      },
-      {
-        title: 'Video de prueba 7',
-        thumbnail: 'https://img.youtube.com/vi/VIDEO_ID7/mqdefault.jpg',
-      },
-    ];
-  } */
 
   search() {
     const query = this.searchForm.value.search;
@@ -88,9 +61,57 @@ export class HomeComponent {
         title: item.snippet.title,
         thumbnail: item.snippet.thumbnails.high.url,
         videoId: item.id.videoId,
+        isFavorite: this.isFavorite(item.id.videoId),
       }));
     });
     console.log('Resultados:', this.searchResults);
+  }
+
+  loadFavorites(userId: string) {
+    console.log('Cargando favoritos para el usuario:', userId);
+    this.favoritesService.getFavorites(userId).subscribe((favs) => {
+      this.favorites = favs.map((fav: any) => ({
+        userId: fav.userId,
+        videoId: fav.videoId,
+        title: fav.title,
+        thumbnail: fav.thumbnail,
+      }));
+      console.log('Favoritos cargados:', this.favorites);
+    });
+  }
+
+  isFavorite(videoId: string): boolean {
+    return this.favorites.some((fav) => fav.videoId === videoId);
+  }
+
+  toggleFavorite(video: any) {
+    if (this.isFavorite(video.videoId)) {
+      this.favoritesService
+        .removeFavorite(this.user.id, video.videoId)
+
+        .subscribe(() => {
+          this.loadFavorites(this.user.id);
+        });
+      video.isFavorite = false;
+    } else {
+      const fav: Favorite = {
+        userId: this.user.id,
+        videoId: video.videoId,
+        title: video.title,
+        thumbnail: video.thumbnail,
+      };
+      this.favoritesService
+        .addToFavorites(
+          this.user.id,
+          video.videoId,
+          video.title,
+          video.thumbnail
+        )
+        .subscribe(() => {
+          this.loadFavorites(this.user.id);
+          video.isFavorite = true;
+        });
+    }
   }
 
   logout() {

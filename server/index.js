@@ -5,6 +5,7 @@ const connectDB = require("./config/db.js");
 
 const path = require("path");
 const routeUser = require("./routes/authRoutes.js");
+const favoritesRouter = require("./routes/favoritesRoutes.js");
 
 connectDB();
 dotenv.config();
@@ -14,9 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('API funcionando 🚀');
+    res.send('API funcionando');
 });
 app.use("/api/user", routeUser);
+app.use('/favorites', favoritesRouter);
+
 
 
 const PORT = process.env.PORT || 4000;

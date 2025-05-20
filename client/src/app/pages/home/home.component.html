@@ -73,27 +73,17 @@
                   {{ video.title }}
                 </h2>
                 <button
-                  class="pt-2 pb-1 px-2 mx-2 items-center justify-center bg-rose-300 text-white rounded-full hover:bg-rose-500 font-nunito"
+                  (click)="toggleFavorite(video)"
+                  class="pt-2 pb-1 px-2 mx-2 items-center justify-center bg-rose-300 text-white rounded-full hover:opacity-60 font-nunito"
                 >
-                  <i class="pi pi-heart"></i>
+                  <i
+                    class="pi pi-heart-fill"
+                    [ngClass]="{
+                      'text-red-500': video.isFavorite,
+                      'text-white': !video.isFavorite
+                    }"
+                  ></i>
                 </button>
-              </div>
-              <div *ngIf="results.length" class="mt-4 space-y-4">
-                <div
-                  *ngFor="let video of results"
-                  class="flex gap-4 items-start"
-                >
-                  <img
-                    [src]="video.snippet.thumbnails.default.url"
-                    alt="thumb"
-                  />
-                  <div>
-                    <h2 class="font-bold">{{ video.snippet.title }}</h2>
-                    <p class="text-sm text-gray-600">
-                      {{ video.snippet.channelTitle }}
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -117,22 +107,28 @@
             class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
           >
             <div
-              *ngFor="let video of searchResults"
+              *ngFor="let video of favorites"
               class="p-4 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              <img
-                [src]="video.thumbnail"
-                alt="Thumbnail"
-                class="w-full mb-2"
-              />
+              <a
+                [href]="'https://www.youtube.com/watch?v=' + video.videoId"
+                target="_blank"
+              >
+                <img
+                  [src]="video.thumbnail"
+                  alt="Thumbnail"
+                  class="w-full mb-2 rounded-md"
+                />
+              </a>
               <div class="flex flex-row gap-1.5 items-start justify-between">
-                <h2 class="text-lg font-semibold font-nunito items-center">
+                <h2 class="text-md font-semibold font-nunito">
                   {{ video.title }}
                 </h2>
                 <button
-                  class="pt-2 pb-1 px-2 items-center justify-center bg-rose-300 text-white rounded-full hover:bg-rose-500 font-nunito"
+                  (click)="toggleFavorite(video)"
+                  class="pt-2 pb-1 px-2 mx-2 items-center justify-center bg-rose-300 text-white rounded-full hover:bg-rose-500 font-nunito"
                 >
-                  <i class="pi pi-heart"></i>
+                  <i class="pi pi-heart-fill text-red-500"></i>
                 </button>
               </div>
             </div>
